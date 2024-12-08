@@ -21,26 +21,31 @@
 
 Некоторые из используемых мной моделей могут использовать данные твоих запросов для дальнейшего обучения. Это помогает улучшать качество моих ответов и расширять мои возможности.
 
-Для начала работы клонируйте репозиторий самого бота:
+### Для начала работы клонируйте репозиторий самого бота:
 
 ```bash
 git clone https://github.com/Yupipanda/summarizebot.git
 cd summarizebot
 ```
 
-### Настройте файл [.env](https://github.com/Yupipanda/YupiAI/blob/master/.env), там и так все понятно.
+#### Настройте файл [.env](https://github.com/Yupipanda/YupiAI/blob/master/.env), там и так все понятно.
 
 # Ну а дальше:
 
 ## Если Docker:
 
-### Настройте файл [Dockerfile](https://github.com/Yupipanda/YupiAI/blob/master/Dockerfile)
+#### Настройте файл [Dockerfile](https://github.com/Yupipanda/YupiAI/blob/master/Dockerfile)
 
-#### Если бот будет работать пулами, то:
+### Если бот будет работать пулами, то:
 
 ```dockerfile
 CMD ["poetry", "run", "python3", "main_pol.py"]
 ```
+```bash
+sudo docker build -t yupiai .
+sudo docker run -d --restart=always --name yupiai-container yupiai
+```
+### Иначе
 
 #### Если бот будет работать вебхуком с кастомными сертификатами:
 
@@ -54,11 +59,11 @@ CMD ["poetry", "run", "python3", "main_web.py"]
 CMD ["poetry", "run", "python3", "main_web.py"]
 ```
 
-### Далее
+##### Далее
 
 ```bash
 sudo docker build -t yupiai .
-sudo docker run -d -p 80:80 --restart=always --name yupiai-container yupiai
+sudo docker run -d -p <порт, который вы указали в самом файле запуска>:<ну сами поймете> --restart=always --name yupiai-container yupiai
 ```
 
 ## Без Docker:
