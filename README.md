@@ -28,7 +28,7 @@ git clone https://github.com/Yupipanda/summarizebot.git
 cd summarizebot
 ```
 
-Настройте файл `.env` согласно инструкциям в репозитории.
+### Настройте файл [.env](https://github.com/Yupipanda/YupiAI/blob/master/.env), там и так все понятно.
 
 # Ну а дальше:
 
