@@ -48,11 +48,13 @@ class GenAns(StatesGroup):
 
 @rt.message(Command('clear_history'))
 async def cleary(msg: Message, state: FSMContext):
-    await state.clear()
-    await msg.delete()
-    os.remove(f"users_histories/{msg.from_user.id}.json")
-    await msg.answer('✅ История сообщений очищена!')
-
+    try:
+        await state.clear()
+        await msg.delete()
+        os.remove(f"users_histories/{msg.from_user.id}.json")
+        await msg.answer('✅ История сообщений очищена!')
+    except Exception as ex:
+        logger.error(f'Ошибка с очисткой:\n{ex}')
 
 @rt.message(GenAns.generate)
 async def mmm(msg: Message, state: FSMContext):
