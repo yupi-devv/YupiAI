@@ -65,7 +65,7 @@ async def webhook(request: Request):
 # Запуск бота
 if __name__ == "__main__":
     HOST = config("HOST")
-    PORT = config("PORT")
+    PORT = int(config("PORT"))
     logging.basicConfig(
         handlers=[InterceptHandler()],
         level=logging.getLevelName(LOGLEVEL)
