@@ -9,7 +9,6 @@ from app.ai.aiaudio import transcribe_audio
 from app.ai.aispeech import ai_speech
 from app.ai.aimain import getfunc
 from app.ai.scrape import sum_from_link, sum_from_inp
-from app.utils.bbs import encode_image
 from app.utils.text import answer_manipulate
 from app.utils.allowed_users import ALLOWED_IDS
 from app.utils.pdf_to_text import extract_text_from_pdf
@@ -20,26 +19,10 @@ import os
 from loguru import logger
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
-import asyncio
-import json
+from app.utils.history import append_to_json_file
 
 rt = Router() 
 
-
-async def append_to_json_file(data, filename):
-    with open(filename, 'a+') as file:
-        file.seek(0, 0)  # Перемещаемся в начало файла
-        
-        try:
-            content = json.load(file)  # Пытаемся загрузить существующий контент
-        except ValueError:  # Файл пустой или поврежден
-            content = []
-            
-        content.append(data)  # Добавляем новые данные
-        
-        file.seek(0, 0)  # Возвращаемся в начало файла
-        file.truncate()  # Очищаем файл
-        json.dump(content, file, indent=4, ensure_ascii=False)  # Записываем обновленный контент
 
 
 class GenAns(StatesGroup):
@@ -59,7 +42,6 @@ async def cleary(msg: Message, state: FSMContext):
 @rt.message(GenAns.generate)
 async def mmm(msg: Message, state: FSMContext):
     try:
-        
         dat = await state.get_data()
         msg_id = dat["genmessage_id"]
         await msg.delete()
@@ -68,7 +50,7 @@ async def mmm(msg: Message, state: FSMContext):
         None
 
 
-@rt.message(F.text, F.text != '/start', F.text != '/clear_history', F.func(lambda msg: msg if msg.from_user.id in ALLOWED_IDS else None))
+@rt.message(F.text, F.text != '/start', F.text != '/clear_history', F.func(lambda msg: msg if msg.from_user.id in ALLOWED_IDS or '*' in ALLOWED_IDS or str(msg.from_user.id) in ALLOWED_IDS else None))
 async def cmd_text(msg: Message, state: FSMContext):
     kb = InlineKeyboardBuilder()
     kb.button(text='Прислать ответ голосовым', callback_data='answer_audio')
@@ -78,7 +60,6 @@ async def cmd_text(msg: Message, state: FSMContext):
         
         data = {'role': 'user', 'content': msg.text}
         await append_to_json_file(data, f'users_histories/{msg.from_user.id}.json')
-
         if '_scrape_url_' in func:
             await msg.reply('📝 Погоди, сокращаю....')
             await state.set_state(GenAns.generate)
@@ -87,6 +68,7 @@ async def cmd_text(msg: Message, state: FSMContext):
             for i in range(3):
                 try:
                     link = func.split(', ')[1]
+
                     result = await sum_from_link(link)
                     ddd = await answer_manipulate(result)
                     if type(ddd) == list:
@@ -224,7 +206,7 @@ async def cmd_text(msg: Message, state: FSMContext):
         logger.error(f'Ошибка:\n{ex}')    
 
     
-@rt.message(F.document)
+@rt.message(F.document, F.func(lambda msg: msg if msg.from_user.id in ALLOWED_IDS or '*' in ALLOWED_IDS or str(msg.from_user.id) in ALLOWED_IDS else None))
 async def doc(msg: Message, state: FSMContext):
     kb = InlineKeyboardBuilder()
     kb.button(text='Прислать ответ голосовым', callback_data='answer_audio')
@@ -384,7 +366,7 @@ async def doc(msg: Message, state: FSMContext):
         await msg.answer('Я понимаю только PDF файлы, убедитесь, что расширение вашего документа .pdf')
             
 
-@rt.message(F.photo)
+@rt.message(F.photo, F.func(lambda msg: msg if msg.from_user.id in ALLOWED_IDS or '*' in ALLOWED_IDS or str(msg.from_user.id) in ALLOWED_IDS else None))
 async def phot(msg: Message, state: FSMContext):
     kb = InlineKeyboardBuilder()
     kb.button(text='Прислать ответ голосовым', callback_data='answer_audio')
@@ -424,7 +406,7 @@ async def phot(msg: Message, state: FSMContext):
             continue
 
 
-@rt.message(F.voice)
+@rt.message(F.voice, F.func(lambda msg: msg if msg.from_user.id in ALLOWED_IDS or '*' in ALLOWED_IDS or str(msg.from_user.id) in ALLOWED_IDS else None))
 async def aud(msg: Message, state: FSMContext):
     kb = InlineKeyboardBuilder()
     kb.button(text='Прислать ответ голосовым', callback_data='answer_audio')

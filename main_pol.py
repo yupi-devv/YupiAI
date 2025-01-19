@@ -6,10 +6,16 @@ import logging
 from btconf import LOGLEVEL, bot
 from loguru import logger
 from aiogram import Dispatcher
+import os
 
 
 
 async def main():
+    dirs = os.listdir(os.getcwd())
+    if 'users_audios' not in dirs or 'users_histories' not in dirs or 'users_images' not in dirs:
+        os.mkdir('users_audios')
+        os.mkdir('users_histories')
+        os.mkdir('users_images')
     logging.basicConfig(
         handlers=[InterceptHandler()],
         level=logging.getLevelName(LOGLEVEL)
@@ -23,6 +29,7 @@ async def main():
         logger.error('Роутеры не зарегались!')
     
     await setup_default_commands(bot)
+    await bot.delete_webhook()
     await dp.start_polling(bot)
     
 

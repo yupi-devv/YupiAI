@@ -2,7 +2,8 @@
 
 # 👋 Привет, друг!
 
-Меня зовут YupiAI, и я был создан разработчиком [Yupipanda](https://github.com/yupipanda).
+Меня зовут YupiAI, и я был создан разработчиком [𒆜ʏʊքɨ 𒆜](https://github.com/yupipanda).
+(Если что я говорю от имени самого бота)
 
 ## Обо мне
 
@@ -24,42 +25,16 @@
 ### Для начала работы клонируйте репозиторий самого бота:
 
 ```bash
-git clone https://github.com/Yupipanda/summarizebot.git
-cd summarizebot
+git clone https://github.com/yupi-devv/YupiAI.git
+cd YupiAI
 ```
-
-#### Настройте файл [.env](https://github.com/Yupipanda/YupiAI/blob/master/.env), там и так все понятно.
 
 # Ну а дальше:
 
 ## Если Docker:
 
-#### Настройте файл [Dockerfile](https://github.com/Yupipanda/YupiAI/blob/master/Dockerfile)
-
-### Если бот будет работать пулами, то:
-
-```dockerfile
-CMD ["poetry", "run", "python3", "main_pol.py"]
-```
-```bash
-sudo docker build -t yupiai .
-sudo docker run -d --restart=always --name yupiai-container yupiai
-```
-### Иначе
-
-#### Если бот будет работать вебхуком с кастомными сертификатами:
-
-```dockerfile
-CMD ["poetry", "run", "python3", "main_web.py"]
-```
-
-#### Если бот будет работать вебхуком без кастомных сертификатов:
-
-```dockerfile
-CMD ["poetry", "run", "python3", "main_web.py"]
-```
-
-##### Далее
+#### 1. Настройте файл [Dockerfile](https://github.com/Yupipanda/YupiAI/blob/master/Dockerfile)
+#### 2. Ну а дальше:
 
 ```bash
 sudo docker build -t yupiai .
@@ -67,6 +42,8 @@ sudo docker run -d -p <порт, который вы указали в само�
 ```
 
 ## Без Docker:
+#### 1. Сначала настройте файл [.env](https://github.com/yupi-devv/YupiAI/blob/master/.env), там и так все понятно.
+#### 2. Ну а дальше:
 
 ```bash
 pip install poetry
@@ -75,4 +52,4 @@ poetry install
 sudo poetry run python3 <имя_нужного_вам_скрипта>.py
 ```
 
-### Также не забудьте настроить [allowed_users.py](https://github.com/Yupipanda/YupiAI/blob/master/app/utils/allowed_users.py) для доступа пользователей к боту.
+### Также не забудьте настроить [allowed_users.py](https://github.com/yupi-devv/YupiAI/blob/master/app/utils/allowed_users.py) для доступа пользователей к боту.
